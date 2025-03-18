@@ -1,0 +1,4 @@
+ART filter=lfs diff=lfs merge=lfs -text
+Game_music filter=lfs diff=lfs merge=lfs -text
+buildedProject/build/Unity3D_Curso_Data/sharedassets0.assets.resS filter=lfs diff=lfs merge=lfs -text
+Library/PackageCache/com.unity.burst/.Runtime/libburst-llvm-16.dylib filter=lfs diff=lfs merge=lfs -text
