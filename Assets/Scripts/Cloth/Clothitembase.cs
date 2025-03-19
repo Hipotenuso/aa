@@ -1,5 +1,6 @@
 using Itens;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Cloth
 {
@@ -11,6 +12,18 @@ namespace Cloth
         public float duration = 2f;
         public string tagToCompare = "Player";
         public int ActualCloth;
+
+        private void Start()
+        {
+            if (player == null)
+            {
+                player = FindAnyObjectByType<PlayerNew>();
+                if (player == null)
+                {
+                    Debug.LogError("Player não encontrado!");
+                }
+            }
+        } 
 
         private void OnTriggerEnter(Collider other)
         {

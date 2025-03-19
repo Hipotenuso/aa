@@ -7,6 +7,11 @@ namespace Enemy
     {
         public StaffBase staffBase;
 
+        void Awake()
+        {
+            if (staffBase == null) staffBase = GetComponentInChildren<StaffBase>();
+        }
+
         protected override void Init()
         {
             base.Init();
