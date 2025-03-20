@@ -45,8 +45,6 @@ public class PlayerNew : MonoBehaviour
 
     public healthBase healthBase;
 
-    
-
     void OnValidate()
     {
         if(healthBase == null) healthBase = GetComponent<healthBase>();
@@ -142,7 +140,7 @@ public class PlayerNew : MonoBehaviour
 
     private void OnKill(healthBase h)
     {
-        if(_alive)
+        if (_alive)
         {
             _alive = false;
             animator.SetTrigger("Death");
@@ -151,14 +149,28 @@ public class PlayerNew : MonoBehaviour
             Invoke(nameof(Revive), 3f);
         }
     }
+
     [NaughtyAttributes.Button]
     public void Respawn()
     {
-        if(cPmanager.HasCheckPoint())
+        if (cPmanager.HasCheckPoint())
         {
-            transform.position = cPmanager.GetPositionToRespawn();
+            Vector3 respawnPosition = cPmanager.GetPositionToRespawn();
+
+            if (respawnPosition != Vector3.zero)
+            {
+                characterController.enabled = false;
+                transform.position = respawnPosition;
+                characterController.enabled = true;
+                
+            }
+            else
+            {
+                
+            }
         }
     }
+
     private void Revive()
     {
         _alive = true;

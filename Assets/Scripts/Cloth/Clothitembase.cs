@@ -1,6 +1,5 @@
 using Itens;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace Cloth
 {
@@ -20,10 +19,19 @@ namespace Cloth
                 player = FindAnyObjectByType<PlayerNew>();
                 if (player == null)
                 {
-                    Debug.LogError("Player não encontrado!");
+                    Debug.LogError("Player não encontrado na cena!");
                 }
             }
-        } 
+
+            if (clothManager == null)
+            {
+                clothManager = FindAnyObjectByType<ClothManager>();
+                if (clothManager == null)
+                {
+                    Debug.LogError("ClothManager não encontrado na cena!");
+                }
+            }
+        }
 
         private void OnTriggerEnter(Collider other)
         {
@@ -35,10 +43,43 @@ namespace Cloth
 
         public virtual void Collect()
         {
+            if (clothManager == null)
+            {
+                Debug.LogError("ClothManager está nulo! Não foi possível coletar o item.");
+                return;
+            }
+
+            if (player == null)
+            {
+                Debug.LogError("Player está nulo! Não foi possível coletar o item.");
+                return;
+            }
+
             var setup = clothManager.GetSetupByType(clothType);
+            if (setup == null)
+            {
+                Debug.LogError("Setup não encontrado para o tipo de roupa: " + clothType);
+                return;
+            }
+
             player.ChangeTexture(setup, duration);
-            ActualCloth = gameObject.GetComponent<ClothItemSpeed>().cloth1;
-            ActualCloth = gameObject.GetComponent<ClothItemStrong>().cloth2;
+
+            ClothItemSpeed clothSpeed = gameObject.GetComponent<ClothItemSpeed>();
+            ClothItemStrong clothStrong = gameObject.GetComponent<ClothItemStrong>();
+
+            if (clothSpeed != null)
+            {
+                ActualCloth = clothSpeed.cloth1;
+            }
+            else if (clothStrong != null)
+            {
+                ActualCloth = clothStrong.cloth2;
+            }
+            else
+            {
+                Debug.LogWarning("Nenhuma variação de ClothItem encontrada!");
+            }
+
             HideObject();
         }
 

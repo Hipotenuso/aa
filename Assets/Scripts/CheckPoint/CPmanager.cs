@@ -3,11 +3,17 @@ using UnityEngine;
 
 public class CPmanager : MonoBehaviour
 {
-    public CheckPointbase checkPointbase1;
-    public CheckPointbase checkPointbase2;
-
+    public List<CheckPointbase> checkPoints = new List<CheckPointbase>();
     public int lastCheckPoint = 0;
-    public List<CheckPointbase> checkPoints;
+
+    void Start()
+    {
+        // Preenche a lista com todos os checkpoints na cena, caso não estejam atribuídos manualmente
+        if (checkPoints.Count == 0)
+        {
+            checkPoints = new List<CheckPointbase>(FindObjectsByType<CheckPointbase>(FindObjectsSortMode.None));
+        }
+    }
 
     public bool HasCheckPoint()
     {
@@ -16,15 +22,24 @@ public class CPmanager : MonoBehaviour
 
     public void SaveCheckPoint(int i)
     {
-        if(i > lastCheckPoint)
+        if (i > lastCheckPoint)
         {
             lastCheckPoint = i;
+            Debug.Log("Checkpoint salvo: " + lastCheckPoint);
         }
     }
 
     public Vector3 GetPositionToRespawn()
     {
-        var checkpuint = checkPoints.Find(i => i.key == lastCheckPoint);
-        return checkpuint.transform.position;
+        var checkpoint = checkPoints.Find(i => i.key == lastCheckPoint);
+
+        if (checkpoint != null)
+        {
+            Debug.Log("Respawn no checkpoint: " + lastCheckPoint);
+            return checkpoint.transform.position;
+        }
+
+        Debug.LogWarning("Nenhum checkpoint encontrado! Retornando posição inicial.");
+        return Vector3.zero;
     }
 }
